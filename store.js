@@ -1,0 +1,89 @@
+// Camada de dados: PostgreSQL no Supabase. Só o servidor usa esta ligação (DATABASE_URL é segredo).
+const { Pool } = require('pg');
+const defaults = require('./defaults');
+
+if (!process.env.DATABASE_URL) {
+  console.error('\n  Falta a variável DATABASE_URL. Copie .env.example para .env e preencha os dados do Supabase.\n');
+  process.exit(1);
+}
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },   // ligação cifrada ao Supabase
+  max: 6,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000
+});
+pool.on('error', e => console.error('Erro na ligação à base de dados:', e.message));
+
+const q = (text, params) => pool.query(text, params);
+const tx = async fn => {
+  const c = await pool.connect();
+  try { await c.query('begin'); const r = await fn(c); await c.query('commit'); return r; }
+  catch (e) { await c.query('rollback').catch(() => {}); throw e; }
+  finally { c.release(); }
+};
+
+/* ---------- conteúdo público ---------- */
+const getContent = async () => {
+  const { rows } = await q('select key, value from public.site_content');
+  return { ...defaults.content, ...Object.fromEntries(rows.map(r => [r.key, r.value])) };
+};
+const getServices = async () => (await q('select id, title, text, image, label, href from public.services order by position, id')).rows;
+const getGallery = async () => (await q('select id, src, alt from public.gallery order by position, id')).rows;
+
+const setContent = obj => {
+  const keys = Object.keys(obj);
+  if (!keys.length) return Promise.resolve();
+  return q(`insert into public.site_content (key, value)
+            select * from unnest($1::text[], $2::text[])
+            on conflict (key) do update set value = excluded.value, updated_at = now()`, [keys, keys.map(k => obj[k])]);
+};
+const setServices = list => tx(async c => {
+  await c.query('delete from public.services');
+  for (const [i, s] of list.entries())
+    await c.query('insert into public.services (id, position, title, text, image, label, href) values ($1,$2,$3,$4,$5,$6,$7)', [s.id, i, s.title, s.text, s.image, s.label, s.href]);
+});
+const setGallery = list => tx(async c => {
+  await c.query('delete from public.gallery');
+  for (const [i, g] of list.entries())
+    await c.query('insert into public.gallery (id, position, src, alt) values ($1,$2,$3,$4)', [g.id, i, g.src, g.alt]);
+});
+
+/* ---------- pedidos ---------- */
+const map = r => ({ ...r, createdAt: r.created_at.toISOString(), created_at: undefined });
+const listReservations = async () => (await q(
+  `select id, created_at, status, nome, telefone, email, mensagem, checkin::text as checkin, checkout::text as checkout, hospedes, notified
+   from public.reservations order by created_at desc`)).rows.map(map);
+const listEvents = async () => (await q(
+  `select id, created_at, status, nome, telefone, email, mensagem, tipo, coalesce(data::text, '') as data, notified
+   from public.events order by created_at desc`)).rows.map(map);
+
+const addReservation = r => q(
+  `insert into public.reservations (id, status, nome, telefone, email, mensagem, checkin, checkout, hospedes)
+   values ($1,'nova',$2,$3,$4,$5,$6,$7,$8)`, [r.id, r.nome, r.telefone, r.email, r.mensagem, r.checkin, r.checkout, r.hospedes]);
+const addEvent = r => q(
+  `insert into public.events (id, status, nome, telefone, email, mensagem, tipo, data)
+   values ($1,'nova',$2,$3,$4,$5,$6,$7)`, [r.id, r.nome, r.telefone, r.email, r.mensagem, r.tipo, r.data || null]);
+
+const TABLES = { reservas: 'public.reservations', eventos: 'public.events' };
+const setStatus = async (kind, id, status) => (await q(`update ${TABLES[kind]} set status = $2 where id = $1`, [id, status])).rowCount;
+const markNotified = (kind, id) => q(`update ${TABLES[kind]} set notified = true where id = $1`, [id]);
+const remove = async (kind, id) => (await q(`delete from ${TABLES[kind]} where id = $1`, [id])).rowCount;
+
+/* ---------- conta de administração ---------- */
+const getAdmin = async () => (await q('select username as user, salt, hash from public.admin_user where id = 1')).rows[0] || null;
+const setAdmin = (user, salt, hash) => q(
+  `insert into public.admin_user (id, username, salt, hash) values (1, $1, $2, $3)
+   on conflict (id) do update set username = excluded.username, salt = excluded.salt, hash = excluded.hash`, [user, salt, hash]);
+
+/* ---------- arranque ---------- */
+const seedIfEmpty = async () => {
+  const n = async t => +(await q(`select count(*)::int as n from ${t}`)).rows[0].n;
+  if (!(await n('public.site_content'))) await setContent(defaults.content);
+  if (!(await n('public.services'))) await setServices(defaults.services);
+  if (!(await n('public.gallery'))) await setGallery(defaults.gallery);
+};
+
+module.exports = { pool, q, tx, getContent, getServices, getGallery, setContent, setServices, setGallery,
+  listReservations, listEvents, addReservation, addEvent, setStatus, markNotified, remove, getAdmin, setAdmin, seedIfEmpty };

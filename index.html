@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tinguita Paradise | O paraíso espera por si</title>
+<meta name="description" content="Tinguita Paradise, Namibe: piscina e lazer, gastronomia de qualidade, bar com bebidas especiais e um ambiente acolhedor para toda a família. Aberto 24 horas.">
+<link rel="icon" href="logo.png">
+<script>
+  // estados iniciais de animação só existem com JavaScript e sem preferência por menos movimento
+  (function () {
+    var r = document.documentElement;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('js');
+    addEventListener('load', function () { setTimeout(function () { if (!window.__motionReady) r.classList.remove('js'); }, 3000); });
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- gradientes usados nas linhas douradas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#e0b860" stop-opacity="0"/>
+      <stop offset=".12" stop-color="#9a7430"/>
+      <stop offset=".35" stop-color="#f6e2a8"/>
+      <stop offset=".55" stop-color="#c79a45"/>
+      <stop offset=".78" stop-color="#fbe9b6"/>
+      <stop offset=".92" stop-color="#9a7430"/>
+      <stop offset="1" stop-color="#e0b860" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="progress" id="progress"></div>
+<header class="nav" id="nav">
+  <a class="brand" href="#inicio" aria-label="Tinguita Paradise">
+    <img src="logo.png" alt="">
+    <span>Tinguita<small>Paradise</small></span>
+  </a>
+  <nav>
+    <a href="#inicio" class="on">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#quartos-info">Quartos</a>
+    <a href="#restaurante">Gastronomia</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <a class="btn btn-sm" href="#reservas" data-open="reservas">Reservar agora</a>
+</header>
+
+<a class="wa" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89a9.83 9.83 0 0 1 6.99 2.9 9.82 9.82 0 0 1 2.89 7c0 5.45-4.44 9.88-9.88 9.88M20.46 3.49A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.42z"/></svg>
+  <span class="wa-num" data-k="phone">940 637 666</span>
+  <b class="badge" aria-label="1 mensagem">1</b>
+</a>
+
+<main id="story">
+  <div class="stage">
+    <video id="vid" src="tinguita2.mp4" poster="images/piscina.jpg" muted playsinline preload="auto" disablepictureinpicture></video>
+    <div class="shade"></div>
+
+    <section class="panel hero" id="inicio" data-from="0" data-to="3.5">
+      <h1 data-type data-k="heroTitle">Bem-vindo ao Tinguita Paradise</h1>
+      <p class="lead fade" data-k="heroLead">O paraíso espera por si. Conforto, tranquilidade e um ambiente acolhedor para toda a família.</p>
+      <div class="cta-row fade">
+        <a class="btn" href="#reservas" data-open="reservas">Reservar agora</a>
+      </div>
+    </section>
+
+    <section class="panel" id="quartos" data-from="4" data-to="13.5">
+      <p class="tag fade">Hospedagem e conforto</p>
+      <h2 data-split data-k="panelRoomsTitle">Conforto e tranquilidade para toda a família</h2>
+      <ul class="list fade">
+        <li>Ambiente acolhedor</li>
+        <li>Piscina e lazer</li>
+        <li>Gastronomia de qualidade</li>
+        <li>Bar com bebidas especiais</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="gastronomia" data-from="14" data-to="17.5">
+      <p class="tag fade">Experiência gastronômica</p>
+      <h2 data-split data-k="panelFoodTitle">Gastronomia de qualidade</h2>
+      <p class="lead fade" data-k="panelFoodLead">Saboreie a mesa posta ao pôr do sol e prolongue a noite no bar com bebidas especiais, junto à piscina.</p>
+      <p class="open fade" data-k="hours">Aberto 24 horas</p>
+    </section>
+
+    <section class="panel" id="eventos" data-from="18" data-to="999">
+      <p class="tag fade">Eventos</p>
+      <h2 data-split data-k="panelEventsTitle">Momentos inesquecíveis</h2>
+      <p class="lead fade" data-k="panelEventsLead">Celebre seu casamento, aniversários ou eventos corporativos em um cenário paradisíaco.</p>
+      <div class="cta-row fade">
+        <a class="btn" href="#agendar" data-open="agendar">Agendar evento</a>
+      </div>
+    </section>
+
+    <div class="hint" id="hint">Role para explorar</div>
+  </div>
+</main>
+
+
+
+<div class="wave" style="--from:#090f17;--to:#F7F1E6"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 55C240 5 520 100 820 70S1260 0 1440 30V90H0Z"/><path class="l" d="M0 55C240 5 520 100 820 70S1260 0 1440 30"/></svg></div>
+
+<!-- Sobre -->
+<section class="about2" id="sobre">
+  <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="aboutClip" clipPathUnits="objectBoundingBox"><path d="M0.2 0.06C0.38 0 0.6 0.09 0.8 0.04C0.88 0.02 0.95 0.03 0.985 0.07Q1 0.09 1 0.14V1H0.06C0.01 0.84 0 0.7 0 0.52C0 0.3 0.06 0.12 0.2 0.06Z"/></clipPath>
+      <clipPath id="aboutClipM" clipPathUnits="objectBoundingBox"><path d="M0 0.2Q0 0.11 0.07 0.095C0.22 0.03 0.45 0 0.66 0.05C0.82 0.09 0.93 0.13 0.97 0.125Q1 0.125 1 0.19V1H0Z"/></clipPath>
+      <linearGradient id="bronze" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#B58A45" stop-opacity=".55"/><stop offset=".3" stop-color="#C6A36A"/><stop offset=".62" stop-color="#E3C17D"/><stop offset=".85" stop-color="#C6A36A"/><stop offset="1" stop-color="#B58A45" stop-opacity=".7"/></linearGradient>
+    </defs>
+  </svg>
+  <svg class="palm" viewBox="-20 -150 520 330" aria-hidden="true" focusable="false"><path d="M0 0Q210 -120 470 70" fill="none" stroke="#142A38" stroke-width="3"/><g transform="translate(27.3 -14.2) rotate(-82.2)"><path d="M0 0Q33.5 -7.4 67.0 0Q33.5 7.4 0 0Z"/></g><g transform="translate(27.3 -14.2) rotate(32.0)"><path d="M0 0Q33.5 -7.4 67.0 0Q33.5 7.4 0 0Z"/></g><g transform="translate(41.1 -20.3) rotate(-79.4)"><path d="M0 0Q40.5 -8.9 81.0 0Q40.5 8.9 0 0Z"/></g><g transform="translate(41.1 -20.3) rotate(33.9)"><path d="M0 0Q40.5 -8.9 81.0 0Q40.5 8.9 0 0Z"/></g><g transform="translate(55.0 -25.8) rotate(-76.5)"><path d="M0 0Q47.0 -10.3 94.0 0Q47.0 10.3 0 0Z"/></g><g transform="translate(55.0 -25.8) rotate(35.9)"><path d="M0 0Q47.0 -10.3 94.0 0Q47.0 10.3 0 0Z"/></g><g transform="translate(69.0 -30.6) rotate(-73.5)"><path d="M0 0Q53.0 -11.7 106.0 0Q53.0 11.7 0 0Z"/></g><g transform="translate(69.0 -30.6) rotate(37.9)"><path d="M0 0Q53.0 -11.7 106.0 0Q53.0 11.7 0 0Z"/></g><g transform="translate(83.2 -34.8) rotate(-70.6)"><path d="M0 0Q58.4 -12.8 116.8 0Q58.4 12.8 0 0Z"/></g><g transform="translate(83.2 -34.8) rotate(40.0)"><path d="M0 0Q58.4 -12.8 116.8 0Q58.4 12.8 0 0Z"/></g><g transform="translate(97.4 -38.4) rotate(-67.6)"><path d="M0 0Q63.1 -13.9 126.2 0Q63.1 13.9 0 0Z"/></g><g transform="translate(97.4 -38.4) rotate(42.1)"><path d="M0 0Q63.1 -13.9 126.2 0Q63.1 13.9 0 0Z"/></g><g transform="translate(111.7 -41.3) rotate(-64.6)"><path d="M0 0Q67.1 -14.8 134.3 0Q67.1 14.8 0 0Z"/></g><g transform="translate(111.7 -41.3) rotate(44.2)"><path d="M0 0Q67.1 -14.8 134.3 0Q67.1 14.8 0 0Z"/></g><g transform="translate(126.1 -43.5) rotate(-61.5)"><path d="M0 0Q70.5 -15.5 140.9 0Q70.5 15.5 0 0Z"/></g><g transform="translate(126.1 -43.5) rotate(46.3)"><path d="M0 0Q70.5 -15.5 140.9 0Q70.5 15.5 0 0Z"/></g><g transform="translate(140.7 -45.2) rotate(-58.5)"><path d="M0 0Q73.0 -16.1 146.0 0Q73.0 16.1 0 0Z"/></g><g transform="translate(140.7 -45.2) rotate(48.4)"><path d="M0 0Q73.0 -16.1 146.0 0Q73.0 16.1 0 0Z"/></g><g transform="translate(155.3 -46.1) rotate(-55.5)"><path d="M0 0Q74.8 -16.5 149.6 0Q74.8 16.5 0 0Z"/></g><g transform="translate(155.3 -46.1) rotate(50.5)"><path d="M0 0Q74.8 -16.5 149.6 0Q74.8 16.5 0 0Z"/></g><g transform="translate(170.1 -46.5) rotate(-52.6)"><path d="M0 0Q75.8 -16.7 151.6 0Q75.8 16.7 0 0Z"/></g><g transform="translate(170.1 -46.5) rotate(52.6)"><path d="M0 0Q75.8 -16.7 151.6 0Q75.8 16.7 0 0Z"/></g><g transform="translate(184.9 -46.1) rotate(-49.6)"><path d="M0 0Q76.0 -16.7 152.0 0Q76.0 16.7 0 0Z"/></g><g transform="translate(184.9 -46.1) rotate(54.6)"><path d="M0 0Q76.0 -16.7 152.0 0Q76.0 16.7 0 0Z"/></g><g transform="translate(199.9 -45.2) rotate(-46.8)"><path d="M0 0Q75.5 -16.6 150.9 0Q75.5 16.6 0 0Z"/></g><g transform="translate(199.9 -45.2) rotate(56.6)"><path d="M0 0Q75.5 -16.6 150.9 0Q75.5 16.6 0 0Z"/></g><g transform="translate(214.9 -43.5) rotate(-43.9)"><path d="M0 0Q74.2 -16.3 148.4 0Q74.2 16.3 0 0Z"/></g><g transform="translate(214.9 -43.5) rotate(58.5)"><path d="M0 0Q74.2 -16.3 148.4 0Q74.2 16.3 0 0Z"/></g><g transform="translate(230.1 -41.3) rotate(-41.1)"><path d="M0 0Q72.2 -15.9 144.3 0Q72.2 15.9 0 0Z"/></g><g transform="translate(230.1 -41.3) rotate(60.4)"><path d="M0 0Q72.2 -15.9 144.3 0Q72.2 15.9 0 0Z"/></g><g transform="translate(245.4 -38.4) rotate(-38.4)"><path d="M0 0Q69.5 -15.3 139.0 0Q69.5 15.3 0 0Z"/></g><g transform="translate(245.4 -38.4) rotate(62.2)"><path d="M0 0Q69.5 -15.3 139.0 0Q69.5 15.3 0 0Z"/></g><g transform="translate(260.7 -34.8) rotate(-35.8)"><path d="M0 0Q66.2 -14.6 132.3 0Q66.2 14.6 0 0Z"/></g><g transform="translate(260.7 -34.8) rotate(64.0)"><path d="M0 0Q66.2 -14.6 132.3 0Q66.2 14.6 0 0Z"/></g><g transform="translate(276.2 -30.6) rotate(-33.2)"><path d="M0 0Q62.2 -13.7 124.5 0Q62.2 13.7 0 0Z"/></g><g transform="translate(276.2 -30.6) rotate(65.6)"><path d="M0 0Q62.2 -13.7 124.5 0Q62.2 13.7 0 0Z"/></g><g transform="translate(291.8 -25.8) rotate(-30.7)"><path d="M0 0Q57.8 -12.7 115.6 0Q57.8 12.7 0 0Z"/></g><g transform="translate(291.8 -25.8) rotate(67.2)"><path d="M0 0Q57.8 -12.7 115.6 0Q57.8 12.7 0 0Z"/></g><g transform="translate(307.5 -20.3) rotate(-28.3)"><path d="M0 0Q52.9 -11.6 105.7 0Q52.9 11.6 0 0Z"/></g><g transform="translate(307.5 -20.3) rotate(68.8)"><path d="M0 0Q52.9 -11.6 105.7 0Q52.9 11.6 0 0Z"/></g><g transform="translate(323.2 -14.2) rotate(-25.9)"><path d="M0 0Q47.5 -10.5 95.1 0Q47.5 10.5 0 0Z"/></g><g transform="translate(323.2 -14.2) rotate(70.2)"><path d="M0 0Q47.5 -10.5 95.1 0Q47.5 10.5 0 0Z"/></g><g transform="translate(339.1 -7.4) rotate(-23.6)"><path d="M0 0Q41.9 -9.2 83.8 0Q41.9 9.2 0 0Z"/></g><g transform="translate(339.1 -7.4) rotate(71.6)"><path d="M0 0Q41.9 -9.2 83.8 0Q41.9 9.2 0 0Z"/></g><g transform="translate(355.1 0.0) rotate(-21.4)"><path d="M0 0Q36.0 -7.9 71.9 0Q36.0 7.9 0 0Z"/></g><g transform="translate(355.1 0.0) rotate(72.9)"><path d="M0 0Q36.0 -7.9 71.9 0Q36.0 7.9 0 0Z"/></g><g transform="translate(371.2 8.1) rotate(-19.3)"><path d="M0 0Q29.9 -6.6 59.7 0Q29.9 6.6 0 0Z"/></g><g transform="translate(371.2 8.1) rotate(74.2)"><path d="M0 0Q29.9 -6.6 59.7 0Q29.9 6.6 0 0Z"/></g><g transform="translate(387.4 16.8) rotate(-17.2)"><path d="M0 0Q23.6 -5.2 47.2 0Q23.6 5.2 0 0Z"/></g><g transform="translate(387.4 16.8) rotate(75.3)"><path d="M0 0Q23.6 -5.2 47.2 0Q23.6 5.2 0 0Z"/></g><g transform="translate(403.7 26.1) rotate(-15.2)"><path d="M0 0Q17.4 -3.8 34.7 0Q17.4 3.8 0 0Z"/></g><g transform="translate(403.7 26.1) rotate(76.4)"><path d="M0 0Q17.4 -3.8 34.7 0Q17.4 3.8 0 0Z"/></g><g transform="translate(420.1 36.1) rotate(-13.3)"><path d="M0 0Q11.1 -2.4 22.2 0Q11.1 2.4 0 0Z"/></g><g transform="translate(420.1 36.1) rotate(77.4)"><path d="M0 0Q11.1 -2.4 22.2 0Q11.1 2.4 0 0Z"/></g><g transform="translate(436.7 46.8) rotate(-11.4)"><path d="M0 0Q9.0 -2.0 18.0 0Q9.0 2.0 0 0Z"/></g><g transform="translate(436.7 46.8) rotate(78.4)"><path d="M0 0Q9.0 -2.0 18.0 0Q9.0 2.0 0 0Z"/></g><g transform="translate(453.3 58.1) rotate(-9.6)"><path d="M0 0Q9.0 -2.0 18.0 0Q9.0 2.0 0 0Z"/></g><g transform="translate(453.3 58.1) rotate(79.3)"><path d="M0 0Q9.0 -2.0 18.0 0Q9.0 2.0 0 0Z"/></g></svg>
+
+  <div class="about2-in">
+    <div class="about2-text rv">
+      <p class="a2-tag">Sobre o resort</p>
+      <h2 data-k="aboutTitle" data-accent="3">O paraíso <span class="acc">espera por si</span></h2>
+      <p class="a2-para" data-k="aboutText">No bairro Praia Amélia, em Namibe, o Tinguita Paradise reúne piscina e lazer, gastronomia de qualidade e um bar com bebidas especiais num ambiente pensado para receber toda a família, com conforto e tranquilidade.</p>
+    </div>
+
+    <div class="about-photo rv d1" id="aboutSlider" role="region" aria-roledescription="carousel" aria-label="Fotografias do Tinguita Paradise" tabindex="0">
+      <div class="clip">
+        <div class="slides" aria-live="off">
+        <figure class="slide on" role="group" aria-roledescription="slide" aria-label="1 de 4">
+          <img src="images/piscina.jpg" width="1800" height="1125" alt="Piscina e edifícios do Tinguita Paradise ao pôr do sol" decoding="async">
+        </figure>
+        <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 de 4" aria-hidden="true">
+          <img src="images/terraco.jpg" width="1800" height="1125" alt="Terraço com pergolado e mesas sobre o mar" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 de 4" aria-hidden="true">
+          <img src="images/piscina-dia.jpg" width="1800" height="1125" alt="Piscina e terraço do Tinguita Paradise durante o dia, com vista para o mar" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" role="group" aria-roledescription="slide" aria-label="4 de 4" aria-hidden="true">
+          <img src="images/restaurante.jpg" width="1800" height="1125" alt="Sala do restaurante com bar e mesas postas" loading="lazy" decoding="async">
+        </figure>
+        </div>
+      </div>
+      <svg class="contour c-d" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0.06 1C0.01 0.84 0 0.7 0 0.52C0 0.3 0.06 0.12 0.2 0.06C0.38 0 0.6 0.09 0.8 0.04C0.88 0.02 0.95 0.03 0.985 0.07Q1 0.09 1 0.14V1" fill="none" stroke="url(#bronze)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>
+      <svg class="contour c-m" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 1V0.2Q0 0.11 0.07 0.095C0.22 0.03 0.45 0 0.66 0.05C0.82 0.09 0.93 0.13 0.97 0.125Q1 0.125 1 0.19V1" fill="none" stroke="url(#bronze)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>
+      <div class="a2-dots" role="tablist" aria-label="Escolher fotografia">
+        <button type="button" role="tab" class="on" aria-selected="true" data-i="0" aria-label="Ver fotografia 1 de 4: Piscina ao pôr do sol"></button>
+        <button type="button" role="tab" aria-selected="false" data-i="1" aria-label="Ver fotografia 2 de 4: Terraço sobre o mar"></button>
+        <button type="button" role="tab" aria-selected="false" data-i="2" aria-label="Ver fotografia 3 de 4: Piscina e terraço"></button>
+        <button type="button" role="tab" aria-selected="false" data-i="3" aria-label="Ver fotografia 4 de 4: Restaurante e bar"></button>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="wave over" style="--to:#142A38"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 62C240 14 520 96 820 66S1260 6 1440 34V90H0Z"/><path class="l" d="M0 62C240 14 520 96 820 66S1260 6 1440 34"/></svg></div>
+
+<!-- Serviços -->
+<section class="sec navy" id="servicos">
+  <div class="wrap">
+    <div class="head rv">
+      <p class="tag">O que oferecemos</p>
+      <h2 class="big">Conforto em cada detalhe</h2>
+    </div>
+    <div class="cards" id="cards">
+      <article class="card-s rv">
+        <img src="images/piscina-dia.jpg" alt="Piscina" loading="lazy">
+        <div class="body">
+          <h3>Piscina e lazer</h3>
+          <p>Espaço aberto para relaxar e aproveitar o dia com a família e os amigos.</p>
+          <a class="btn btn-sm" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">Desfrutar</a>
+        </div>
+      </article>
+      <article class="card-s rv d1">
+        <img src="images/restaurante.jpg" alt="Sala do restaurante" loading="lazy">
+        <div class="body">
+          <h3>Gastronomia de qualidade</h3>
+          <p>Pratos preparados com cuidado, num ambiente acolhedor.</p>
+          <a class="btn btn-sm" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">Reservar mesa</a>
+        </div>
+      </article>
+      <article class="card-s rv d2">
+        <img src="images/terraco.jpg" alt="Bar no terraço" loading="lazy">
+        <div class="body">
+          <h3>Bar com bebidas especiais</h3>
+          <p>Bebidas selecionadas para a tarde junto ao mar ou para prolongar a noite.</p>
+          <a class="btn btn-sm" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">Desfrutar</a>
+        </div>
+      </article>
+      <article class="card-s rv d3">
+        <img src="images/quarto-1.jpg" alt="Quarto" loading="lazy">
+        <div class="body">
+          <h3>Conforto e tranquilidade</h3>
+          <p>Quartos calmos e acolhedores, pensados para toda a família descansar.</p>
+          <button type="button" class="btn btn-sm" data-open="reservas">Reservar</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="--from:#142A38;--to:#f7f0e4"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 34C250 90 540 4 840 44S1250 88 1440 30V90H0Z"/><path class="l" d="M0 34C250 90 540 4 840 44S1250 88 1440 30"/></svg></div>
+
+<!-- Quartos -->
+<section class="sec cream tight" id="quartos-info">
+  <div class="wrap-wide">
+    <div class="banner rv">
+      <img src="images/hospedagem.jpg" width="2000" height="760" alt="Hospedagem. Quartos para descansar com tranquilidade. Roupa de cama impecável, cabeceira estofada e toalhas bordadas com a nossa marca." loading="lazy">
+      <a class="banner-btn" href="#reservas" data-open="reservas" aria-label="Reservar quarto"></a>
+    </div>
+
+    <!-- versão para telemóvel: o texto da imagem passa a texto real, legível e editável no painel -->
+    <div class="banner-m">
+      <div class="bm-photo"><img src="images/hospedagem.jpg" alt="Cama de casal com roupa de cama branca, toalhas bordadas e cabeceira estofada" loading="lazy"></div>
+      <div class="bm-body">
+        <p class="tag">Hospedagem</p>
+        <h2 class="big" data-k="roomsTitle">Quartos para descansar com tranquilidade</h2>
+        <p class="para" data-k="roomsText">Roupa de cama impecável, cabeceira estofada e toalhas bordadas com a nossa marca. Cada detalhe pensado para que a sua estadia seja confortável e acolhedora.</p>
+        <a class="btn" href="#reservas" data-open="reservas">Reservar quarto</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="--from:#f7f0e4;--to:#090f17"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 30C220 85 520 0 800 35S1240 90 1440 40V90H0Z"/><path class="l" d="M0 30C220 85 520 0 800 35S1240 90 1440 40"/></svg></div>
+
+<!-- Gastronomia -->
+<section class="dark" id="restaurante">
+  <div class="wrap rest">
+    <div class="txt rv">
+      <p class="tag">Gastronomia</p>
+      <h2 class="big" data-k="restTitle">Gastronomia de qualidade, à beira-mar</h2>
+      <p class="para" data-k="restText">Mesas postas na sala climatizada ou sob o pergolado do terraço, com vista aberta para o oceano. Complete a refeição no bar com bebidas especiais.</p>
+      <a class="btn" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">Reservar mesa</a>
+    </div>
+    <div class="rest-img rv d1">
+      <img src="images/terraco.jpg" alt="Terraço sobre o mar com mesas e pergolado" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="--from:#090f17;--to:#f7f0e4"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 40C260 90 560 5 860 45S1280 90 1440 25V90H0Z"/><path class="l" d="M0 40C260 90 560 5 860 45S1280 90 1440 25"/></svg></div>
+
+<!-- Galeria -->
+<section class="sec cream tight" id="galeria">
+  <div class="wrap">
+    <div class="head rv">
+      <p class="tag">Galeria</p>
+      <h2 class="big">Momentos únicos para toda a família</h2>
+    </div>
+    <div class="gallery" id="gallery">
+      <button class="g rv" type="button" data-img="images/galeria-1.jpg"><img src="images/galeria-1.jpg" alt="Piscina, pérgula e edifício ao entardecer" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/galeria-2.jpg"><img src="images/galeria-2.jpg" alt="Terraço com piscina e vista para o mar ao pôr do sol" loading="lazy" decoding="async"></button>
+      <button class="g rv d2" type="button" data-img="images/galeria-3.jpg"><img src="images/galeria-3.jpg" alt="Sala de estar com sofás e mesa de apoio" loading="lazy" decoding="async"></button>
+      <button class="g rv d3" type="button" data-img="images/galeria-4.jpg"><img src="images/galeria-4.jpg" alt="Piscina e bungalows ao pôr do sol" loading="lazy" decoding="async"></button>
+      <button class="g rv" type="button" data-img="images/galeria-5.jpg"><img src="images/galeria-5.jpg" alt="Terraço com bar, pérgula e mesas" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/piscina-dia.jpg"><img src="images/piscina-dia.jpg" alt="Piscina e terraço com vista para o mar" loading="lazy" decoding="async"></button>
+      <button class="g rv d2" type="button" data-img="images/terraco.jpg"><img src="images/terraco.jpg" alt="Terraço com vista para o mar" loading="lazy" decoding="async"></button>
+      <button class="g rv d3" type="button" data-img="images/quarto-1.jpg"><img src="images/quarto-1.jpg" alt="Quarto com cama de casal" loading="lazy" decoding="async"></button>
+      <button class="g rv" type="button" data-img="images/restaurante.jpg"><img src="images/restaurante.jpg" alt="Sala do restaurante" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/quarto-2.jpg"><img src="images/quarto-2.jpg" alt="Quarto com toalhas bordadas" loading="lazy" decoding="async"></button>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="--from:#f7f0e4;--to:#090f17"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 30C220 85 520 0 800 35S1240 90 1440 40V90H0Z"/><path class="l" d="M0 30C220 85 520 0 800 35S1240 90 1440 40"/></svg></div>
+
+<!-- Eventos e rodapé sobre a mesma imagem -->
+<section class="finale" id="eventos-info" style="--photo:url('images/piscina.jpg')">
+  <div class="wrap ev rv">
+    <p class="tag">Eventos</p>
+    <h2 class="big" data-k="eventsTitle">Celebre num cenário paradisíaco</h2>
+    <p class="para" data-k="eventsText">Casamentos, aniversários e eventos corporativos com o mar como pano de fundo. Fale connosco e agende uma visita.</p>
+    <a class="btn" href="#agendar" data-open="agendar">Agendar evento</a>
+  </div>
+
+  <footer id="contacto">
+    <div class="wrap foot">
+      <div class="foot-brand">
+        <a class="brand" href="#inicio"><img src="logo.png" alt=""><span>Tinguita<small>Paradise</small></span></a>
+        <p data-k="footerText">Piscina e lazer. Gastronomia de qualidade. Bar com bebidas especiais.</p>
+      </div>
+      <ul class="ci">
+        <li class="rv">
+          <a class="ci-card" href="https://www.google.com/maps/search/?api=1&query=Tinguita+Paradise+Namibe" target="_blank" rel="noopener">
+            <small>Visite-nos</small>
+            <strong data-k="address">Bairro Praia Amélia, junto à Projeque, Namibe</strong>
+            <em>Ver no mapa</em>
+          </a>
+        </li>
+        <li class="rv d1">
+          <a class="ci-card ci-wa" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">
+            <small>Fale connosco</small>
+            <strong data-k="phone">940 637 666</strong>
+            <em>Reservas e informações no WhatsApp</em>
+          </a>
+        </li>
+        <li class="rv d2">
+          <div class="ci-card">
+            <small>Sempre ao seu dispor</small>
+            <strong data-k="hours">Aberto 24 horas</strong>
+            <em>Receba-o a qualquer hora, de dia ou de noite</em>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="wrap bar"><span>© Tinguita Paradise. Todos os direitos reservados.</span></div>
+  </footer>
+</section>
+
+<dialog id="lightbox"><form method="dialog"><button class="close" aria-label="Fechar">Fechar</button></form><img alt=""></dialog>
+
+<dialog id="reservas">
+  <form class="fm" data-api="reservas">
+    <svg class="fm-curve" viewBox="0 0 420 330" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M30 0C170 60 300 110 372 205C392 232 404 262 410 330" fill="none" stroke="url(#gold)" stroke-width="1.2" vector-effect="non-scaling-stroke"/></svg>
+    <header class="fm-head">
+      <p class="fm-tag">Reservas</p>
+      <h3>Reservar <span>quartos</span></h3>
+      <p class="fm-sub">Preencha o formulário e a nossa equipa entrará em contacto para confirmar a sua reserva.</p>
+      <i class="fm-bar"></i>
+    </header>
+    <div class="fm-card">
+      <div class="fm-grid">
+        <label class="f full"><span>Nome</span><div class="in"><i class="ic ic-user"></i><input name="nome" type="text" required maxlength="100" placeholder="Digite o seu nome" autocomplete="name"></div></label>
+        <label class="f "><span>Telefone</span><div class="in"><i class="ic ic-phone"></i><input name="telefone" type="tel" required maxlength="30" placeholder="Ex.: +244 923 456 789" autocomplete="tel"></div></label>
+        <label class="f "><span>Hóspedes</span><div class="in"><i class="ic ic-group"></i><input name="hospedes" type="number" min="1" max="20" value="2" required></div></label>
+        <label class="f "><span>Check-in</span><div class="in"><i class="ic ic-cal"></i><input name="checkin" type="date" required></div></label>
+        <label class="f "><span>Check-out</span><div class="in"><i class="ic ic-cal"></i><input name="checkout" type="date" required></div></label>
+        <label class="f full ta"><span>Mensagem (opcional)</span><div class="in"><i class="ic ic-chat"></i><textarea name="mensagem" rows="3" maxlength="1000" placeholder="Escreva aqui detalhes da sua estadia..."></textarea></div></label>
+      </div>
+      <p class="msg" role="status"></p>
+      <div class="fm-row"><a class="fm-btn wa-send" target="_blank" rel="noopener" hidden>Avisar também por WhatsApp</a><button type="button" class="fm-btn ghost" data-close>Cancelar</button><button class="fm-btn gold">Enviar pedido</button></div>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="agendar">
+  <form class="fm" data-api="eventos">
+    <svg class="fm-curve" viewBox="0 0 420 330" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M30 0C170 60 300 110 372 205C392 232 404 262 410 330" fill="none" stroke="url(#gold)" stroke-width="1.2" vector-effect="non-scaling-stroke"/></svg>
+    <header class="fm-head">
+      <p class="fm-tag">Eventos</p>
+      <h3>Agendar <span>evento</span></h3>
+      <p class="fm-sub">Preencha o formulário e a nossa equipa entrará em contacto para confirmar o seu evento.</p>
+      <i class="fm-bar"></i>
+    </header>
+    <div class="fm-card">
+      <div class="fm-grid">
+        <label class="f full"><span>Nome</span><div class="in"><i class="ic ic-user"></i><input name="nome" type="text" required maxlength="100" placeholder="Digite o seu nome" autocomplete="name"></div></label>
+        <label class="f "><span>Telefone</span><div class="in"><i class="ic ic-phone"></i><input name="telefone" type="tel" required maxlength="30" placeholder="Ex.: +244 923 456 789" autocomplete="tel"></div></label>
+        <label class="f "><span>E-mail</span><div class="in"><i class="ic ic-mail"></i><input name="email" type="email" maxlength="120" placeholder="Ex.: seu@email.com" autocomplete="email"></div></label>
+        <label class="f sel"><span>Tipo</span><div class="in"><i class="ic ic-group"></i><select name="tipo"><option>Casamento</option><option>Aniversário</option><option>Corporativo</option><option>Visita ao local</option></select></div></label>
+        <label class="f "><span>Data prevista</span><div class="in"><i class="ic ic-cal"></i><input name="data" type="date"></div></label>
+        <label class="f full ta"><span>Mensagem (opcional)</span><div class="in"><i class="ic ic-chat"></i><textarea name="mensagem" rows="3" maxlength="1000" placeholder="Escreva aqui detalhes do seu evento..."></textarea></div></label>
+      </div>
+      <p class="msg" role="status"></p>
+      <div class="fm-row"><a class="fm-btn wa-send" target="_blank" rel="noopener" hidden>Avisar também por WhatsApp</a><button type="button" class="fm-btn ghost" data-close>Cancelar</button><button class="fm-btn gold">Enviar pedido</button></div>
+    </div>
+  </form>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>
