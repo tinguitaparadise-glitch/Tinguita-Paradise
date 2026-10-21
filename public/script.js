@@ -64,14 +64,23 @@
     }
   };
 
+  // Arranque rápido: usa o conteúdo guardado na visita anterior; a versão nova vem da rede (já em cache no servidor)
+  // e fica guardada para a próxima visita. Na primeira visita espera no máximo 1,2 s pela rede.
+  const CACHE_KEY = 'tg:public:v1';
   const loadContent = async () => {
-    try {
-      const ctl = new AbortController();
-      const t = setTimeout(() => ctl.abort(), 2500);
-      const r = await fetch('/api/public', { signal: ctl.signal });
-      clearTimeout(t);
-      if (r.ok) applyContent(await r.json());
-    } catch { /* sem servidor: mantém o conteúdo estático do HTML */ }
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { /* sem armazenamento local */ }
+    const fresh = (async () => {
+      try {
+        const data = await (window.__pub || fetch('/api/public').then(r => (r.ok ? r.json() : null)));
+        if (!data) return null;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { /* cheio ou bloqueado */ }
+        return data;
+      } catch { return null; }
+    })();
+    if (cached && cached.content) { applyContent(cached); return; }
+    const data = await Promise.race([fresh, new Promise(ok => setTimeout(ok, 1200))]);
+    if (data) applyContent(data);
   };
 
   const init = () => {
@@ -87,6 +96,7 @@
       const text = e.textContent.trim();
       e.setAttribute('aria-label', text);
       e.textContent = '';
+      e.classList.add('is-split');
       let i = 0;
       text.split(' ').forEach((word, wi, all) => {
         const w = el('span', 'w');
@@ -124,24 +134,45 @@
       return Math.min(1, Math.max(0, (scrollY - story.offsetTop) / max));
     };
 
+    // O vídeo é carregado depois da primeira pintura e guardado em memória: saltar para qualquer
+    // instante (para a frente ou para trás) não faz pedidos à rede. Ecrãs pequenos usam a versão leve.
+    const DUR = +vid.dataset.dur || 29.1;
+    const loadVideo = async () => {
+      const small = matchMedia('(max-width: 700px)').matches || (navigator.connection && navigator.connection.saveData);
+      const src = small && vid.dataset.small ? vid.dataset.small : vid.dataset.src;
+      if (!src) return;
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error('vídeo');
+        vid.src = URL.createObjectURL(await res.blob());
+      } catch { vid.src = src; }
+      vid.load();
+    };
+    const afterPaint = () => ('requestIdleCallback' in window ? requestIdleCallback(loadVideo, { timeout: 1500 }) : setTimeout(loadVideo, 300));
+    if (document.readyState === 'complete') afterPaint(); else addEventListener('load', afterPaint, { once: true });
+
     vid.addEventListener('loadedmetadata', () => vid.pause());
     // iOS/Safari só decodifica frames depois de uma tentativa de play
     addEventListener('touchstart', () => vid.play().then(() => vid.pause()).catch(() => {}), { once: true, passive: true });
 
-    const tick = () => {
-      const target = progress();
-      current += (target - current) * 0.12;
-      if (Math.abs(target - current) < 0.0004) current = target;
+    let cur = 0, lastT = performance.now();
+    const tick = now => {
+      const dt = Math.min(0.1, Math.max(0.001, (now - lastT) / 1000));
+      lastT = now;
+      const dur = vid.duration || DUR;
+      const want = progress() * (dur - 0.05);                 // segundo do vídeo que a rolagem pede
+      // aproximação suave dependente do tempo (igual a 60 ou 120 Hz) com velocidade máxima:
+      // um salto grande percorre as cenas de forma contínua em vez de saltar
+      let step = (want - cur) * (1 - Math.exp(-dt * 8));
+      const max = 9 * dt;
+      step = Math.max(-max, Math.min(max, step));
+      cur += step;
+      if (Math.abs(want - cur) < 0.004) cur = want;
+      if (vid.readyState >= 2 && !vid.seeking && Math.abs(vid.currentTime - cur) > 0.012) vid.currentTime = cur;
 
-      const dur = vid.duration;
-      if (dur && !vid.seeking) {
-        const t = current * (dur - 0.05);
-        if (Math.abs(vid.currentTime - t) > 0.02) vid.currentTime = t;
-      }
-      hint.style.opacity = target > 0.02 ? 0 : 1;
-      panels.forEach((p, k) => {
-        const sec = target * (vid.duration || 0);
-        const on = !!vid.duration && sec >= +p.dataset.from && sec <= +p.dataset.to;
+      hint.style.opacity = want > 0.3 ? 0 : 1;
+      panels.forEach(p => {
+        const on = cur >= +p.dataset.from && cur <= +p.dataset.to;   // o texto acompanha o que se vê no ecrã
         if (on !== p.classList.contains('on')) {
           p.classList.toggle('on', on);
           if (typer && p.contains(typer)) on ? startTyping() : stopTyping();

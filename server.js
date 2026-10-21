@@ -111,7 +111,11 @@ app.get('/api/health', async (req, res) => {
 app.use('/api', async (req, res, next) => { await ready(); next(); });
 
 /* público */
-app.get('/api/public', async (req, res) => res.json(await getPublic()));
+// s-maxage: a rede da Vercel guarda a resposta 20 s (carregamento rápido sem consultar a base de dados)
+app.get('/api/public', async (req, res) => {
+  res.set('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=120');
+  res.json(await getPublic());
+});
 
 // aviso no WhatsApp da empresa: nunca impede o pedido do visitante
 const alertCompany = async (kind, r) => {

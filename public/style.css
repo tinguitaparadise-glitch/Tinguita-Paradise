@@ -838,3 +838,10 @@ body{-webkit-tap-highlight-color:transparent}
 @media(max-width:640px){.fm-btn.wa-send{width:100%}}
 
 .fm-btn[hidden]{display:none}
+
+/* ---------- primeira pintura sem sobreposição ---------- */
+/* os painéis do vídeo (exceto o de abertura) só aparecem quando o vídeo chega à sua cena */
+.js .panel:not(.hero){opacity:0;transition:opacity .35s}
+.js .panel.on{opacity:1}
+/* os títulos só se mostram depois de divididos em letras: sem piscar, sem texto duplicado */
+.js [data-split]:not(.is-split),.js [data-type]:not(.is-split){visibility:hidden}
