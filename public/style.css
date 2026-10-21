@@ -845,3 +845,33 @@ body{-webkit-tap-highlight-color:transparent}
 .js .panel.on{opacity:1}
 /* os títulos só se mostram depois de divididos em letras: sem piscar, sem texto duplicado */
 .js [data-split]:not(.is-split),.js [data-type]:not(.is-split){visibility:hidden}
+
+/* =====================================================================
+   ESQUELETO DE CARREGAMENTO (ligações lentas)
+   ===================================================================== */
+#boot{position:fixed;inset:0;z-index:200;display:none;overflow:hidden;background:radial-gradient(900px circle at 15% 100%,#c9a24e14,#0000 60%),#090f17;color:#f4efe6}
+.boot #boot{display:block}
+html.boot{overflow:hidden}
+.boot-out #boot{opacity:0;pointer-events:none;transition:opacity .55s ease}
+.sk-nav{display:flex;align-items:center;gap:14px;padding:max(14px,env(safe-area-inset-top)) clamp(18px,4vw,64px) 14px}
+.sk-sp{flex:1}
+.sk-circle{display:block;width:52px;height:52px;border-radius:50%}
+.sk-pill{display:block;width:150px;height:44px;border-radius:99px}
+.sk-pill.sk-big{width:min(62%,210px);height:52px;margin-top:8px}
+.sk-bar{display:block;border-radius:10px;max-width:100%}
+.sk-circle,.sk-pill,.sk-bar{background:linear-gradient(100deg,#ffffff12 20%,#ffffff30 50%,#ffffff12 80%) 0 0/220% 100%;animation:skshine 1.5s linear infinite}
+@keyframes skshine{to{background-position:-220% 0}}
+.sk-hero{position:absolute;left:clamp(20px,6vw,110px);right:clamp(20px,6vw,110px);bottom:clamp(110px,18vh,170px);display:grid;gap:16px;justify-items:start}
+.sk-foot{position:absolute;left:0;right:0;bottom:max(26px,env(safe-area-inset-bottom));display:grid;justify-items:center;gap:12px;font:500 .78rem/1 'Space Grotesk',system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#f4efe6a8}
+.sk-foot p{margin:0}
+.sk-track{width:min(260px,60vw);height:3px;border-radius:3px;background:#ffffff1f;overflow:hidden}
+.sk-track b{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#9a7430,#f3d79a);transition:transform .35s ease-out}
+
+/* cada imagem tem o seu esqueleto até chegar (suave, sem saltos de layout) */
+.skel{background:linear-gradient(100deg,#8c7a5a12 20%,#8c7a5a2e 50%,#8c7a5a12 80%) 0 0/220% 100%;animation:skshine 1.6s linear infinite}
+.skel.ok-all{animation:none}
+.skel img{opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .55s ease}
+.skel img.ok{opacity:1}
+.skel-self:not(.ok){background:linear-gradient(100deg,#ffffff10 20%,#ffffff2a 50%,#ffffff10 80%) 0 0/220% 100%;animation:skshine 1.5s linear infinite}
+.skel-self{transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .5s}
+@media(prefers-reduced-motion:reduce){.sk-circle,.sk-pill,.sk-bar,.skel{animation:none}.sk-track b{transition:none}.boot-out #boot{transition:none}}

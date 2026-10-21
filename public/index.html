@@ -12,6 +12,12 @@
   // estados iniciais de animação só existem com JavaScript e sem preferência por menos movimento
   (function () {
     var r = document.documentElement;
+    var c = navigator.connection;
+    var slow = c && (c.saveData || /(^|-)(2g|3g)/.test(c.effectiveType || ''));
+    // ligação lenta: mostra já o esqueleto; caso contrário só se o site ainda não estiver pronto aos 0,6 s
+    if (slow) r.classList.add('boot'); else setTimeout(function () { if (!window.__ready) r.classList.add('boot'); }, 600);
+    // rede de segurança: se o script principal nunca arrancar, o esqueleto não fica a tapar a página
+    setTimeout(function () { if (!window.__motionReady) r.classList.remove('boot'); }, 8000);
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('js');
     addEventListener('load', function () { setTimeout(function () { if (!window.__motionReady) r.classList.remove('js'); }, 3000); });
   })();
@@ -23,6 +29,22 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- esqueleto de carregamento: aparece em ligações lentas enquanto textos, imagens e vídeo ficam prontos -->
+<div id="boot" role="status" aria-live="polite" aria-label="A carregar o site">
+  <div class="sk-nav"><i class="sk-circle"></i><i class="sk-bar" style="width:120px;height:14px"></i><span class="sk-sp"></span><i class="sk-pill"></i></div>
+  <div class="sk-hero">
+    <i class="sk-bar" style="width:150px;height:10px"></i>
+    <i class="sk-bar" style="width:min(78%,560px);height:clamp(30px,5vw,58px)"></i>
+    <i class="sk-bar" style="width:min(56%,400px);height:clamp(30px,5vw,58px)"></i>
+    <i class="sk-bar" style="width:min(70%,480px);height:12px"></i>
+    <i class="sk-bar" style="width:min(52%,360px);height:12px"></i>
+    <i class="sk-pill sk-big"></i>
+  </div>
+  <div class="sk-foot">
+    <div class="sk-track"><b id="bootBar"></b></div>
+    <p><span id="bootPct">0</span>% &nbsp;A preparar o paraíso&hellip;</p>
+  </div>
+</div>
 
 <!-- gradientes usados nas linhas douradas -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -65,7 +87,7 @@
 
 <main id="story">
   <div class="stage">
-    <video id="vid" data-src="tinguita-scrub.mp4" data-small="tinguita-scrub-m.mp4" data-dur="29.1" poster="images/piscina.jpg" muted playsinline preload="none" disablepictureinpicture></video>
+    <video id="vid" data-src="tinguita-scrub.mp4" data-small="tinguita-scrub-m.mp4" data-tiny="tinguita-scrub-xs.mp4" data-dur="29.1" poster="images/piscina.jpg" muted playsinline preload="none" disablepictureinpicture></video>
     <div class="shade"></div>
 
     <section class="panel hero" id="inicio" data-from="0" data-to="3.5">
@@ -136,7 +158,7 @@
       <div class="clip">
         <div class="slides" aria-live="off">
         <figure class="slide on" role="group" aria-roledescription="slide" aria-label="1 de 4">
-          <img src="images/piscina.jpg" width="1800" height="1125" alt="Piscina e edifícios do Tinguita Paradise ao pôr do sol" decoding="async">
+          <img src="images/piscina.jpg" width="1800" height="1125" alt="Piscina e edifícios do Tinguita Paradise ao pôr do sol" loading="lazy" decoding="async">
         </figure>
         <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 de 4" aria-hidden="true">
           <img src="images/terraco.jpg" width="1800" height="1125" alt="Terraço com pergolado e mesas sobre o mar" loading="lazy" decoding="async">

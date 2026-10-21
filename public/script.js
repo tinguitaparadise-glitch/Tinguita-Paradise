@@ -2,6 +2,95 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
+  /* ---------- ecrã de carregamento: esqueleto até tudo estar pronto ---------- */
+  const root = document.documentElement;
+  const stage = { content: 0, fonts: 0, imgs: 0, video: 0 };
+  const WEIGHT = { content: 0.05, fonts: 0.05, imgs: 0.25, video: 0.65 };
+  const bootBar = $('#bootBar'), bootPct = $('#bootPct');
+  const conn = navigator.connection;
+  const slowNet = !!(conn && (conn.saveData || /(^|-)(2g|3g)/.test(conn.effectiveType || '')));
+  const lite = () => slowNet || matchMedia('(max-width: 700px)').matches;
+  // images/x.jpg -> images/x-s.jpg (800 px) quando o ecrã é pequeno ou a ligação é lenta
+  const lightSrc = src => (lite() && /^images\/[\w-]+\.jpg$/.test(src) && !/-s\.jpg$/.test(src) ? src.replace(/\.jpg$/, '-s.jpg') : src);
+  const lightenStatic = () => {
+    $$('img[src^="images/"]').forEach(i => { const n = lightSrc(i.getAttribute('src')); if (n !== i.getAttribute('src')) i.setAttribute('src', n); });
+    $$('[data-img]').forEach(b => { b.dataset.img = lightSrc(b.dataset.img); });
+  };
+  let bootDone = false;
+  const bump = (k, v) => {
+    stage[k] = Math.max(stage[k], Math.min(1, v));
+    const total = Object.keys(WEIGHT).reduce((a, n) => a + WEIGHT[n] * stage[n], 0);
+    if (bootBar) bootBar.style.transform = 'scaleX(' + total.toFixed(3) + ')';
+    if (bootPct) bootPct.textContent = Math.round(total * 100);
+  };
+  const finishBoot = () => {
+    if (bootDone) return;
+    bootDone = true;
+    window.__ready = true;
+    if (!root.classList.contains('boot')) return;
+    if (bootBar) bootBar.style.transform = 'scaleX(1)';
+    if (bootPct) bootPct.textContent = '100';
+    setTimeout(() => {
+      root.classList.add('boot-out');
+      setTimeout(() => root.classList.remove('boot', 'boot-out'), 650);
+    }, 250);
+  };
+  setTimeout(finishBoot, 30000);   // limite: nunca prende o visitante mais de 30 s
+
+  // vídeo: descarrega para memória com progresso (rolagem sem pedidos de rede); ecrãs pequenos usam a versão leve
+  const loadVideo = () => new Promise(done => {
+    const vid = $('#vid');
+    const small = matchMedia('(max-width: 700px)').matches;
+    const src = vid && (slowNet && vid.dataset.tiny ? vid.dataset.tiny : small && vid.dataset.small ? vid.dataset.small : vid.dataset.src);
+    if (!src) { bump('video', 1); return done(); }
+    vid.preload = 'auto';
+    const ready = () => { bump('video', 1); done(); };
+    vid.addEventListener('loadeddata', ready, { once: true });
+    vid.addEventListener('error', ready, { once: true });
+    (async () => {
+      try {
+        const res = await fetch(src);
+        if (!res.ok || !res.body) throw new Error('vídeo');
+        const total = +res.headers.get('content-length') || 0;
+        const reader = res.body.getReader();
+        const chunks = [];
+        let got = 0;
+        for (;;) {
+          const { done: end, value } = await reader.read();
+          if (end) break;
+          chunks.push(value); got += value.length;
+          if (total) bump('video', (got / total) * 0.97);
+        }
+        vid.src = URL.createObjectURL(new Blob(chunks, { type: 'video/mp4' }));
+      } catch { vid.src = src; }
+      vid.load();
+    })();
+  });
+
+  // imagens: pré-carrega todas (as da página e as da galeria) e conta o progresso
+  const preloadImages = () => {
+    const urls = [...new Set([
+      ...$$('img[src]').map(i => i.currentSrc || i.src),
+      ...$$('[data-img]').map(b => new URL(b.dataset.img, location.href).href)
+    ])];
+    if (!urls.length) { bump('imgs', 1); return Promise.resolve(); }
+    let n = 0;
+    return Promise.all(urls.map(u => new Promise(ok => {
+      const im = new Image();
+      im.onload = im.onerror = () => { bump('imgs', ++n / urls.length); ok(); };
+      im.src = u;
+    })));
+  };
+  // esqueleto individual em cada imagem até ela chegar
+  const skeletonImages = () => $$('.card-s > img, .g img, .slide img, .rest-img img, .banner img, .bm-photo img').forEach(img => {
+    const card = img.matches('.card-s > img');
+    const host = img.parentElement;
+    if (card) img.classList.add('skel-self'); else host.classList.add('skel');
+    const ok = () => { img.classList.add('ok'); if (!card && host.querySelectorAll('img:not(.ok)').length === 0) host.classList.add('ok-all'); };
+    if (img.complete && img.naturalWidth) ok();
+    else { img.addEventListener('load', ok, { once: true }); img.addEventListener('error', ok, { once: true }); }
+  });
+
   /* ---------- conteúdo vindo da administração ---------- */
   const el = (tag, cls, text) => {
     const e = document.createElement(tag);
@@ -33,7 +122,7 @@
       const box = $('#cards');
       box.replaceChildren(...services.map((s, i) => {
         const card = el('article', 'card-s rv' + (i % 4 ? ' d' + (i % 4) : ''));
-        if (s.image) { const img = el('img'); img.src = s.image; img.alt = s.title; img.loading = 'lazy'; card.append(img); }
+        if (s.image) { const img = el('img'); img.src = lightSrc(s.image); img.alt = s.title; img.loading = 'lazy'; card.append(img); }
         const body = el('div', 'body');
         body.append(el('h3', null, s.title), el('p', null, s.text));
         const href = s.href === '#whatsapp' ? '#whatsapp' : safeHref(s.href);
@@ -56,8 +145,8 @@
     if (gallery && gallery.length) {
       $('#gallery').replaceChildren(...gallery.map((g, i) => {
         const b = el('button', 'g rv' + (i % 4 ? ' d' + (i % 4) : ''));
-        b.type = 'button'; b.dataset.img = g.src;
-        const img = el('img'); img.src = g.src; img.alt = g.alt || ''; img.loading = 'lazy';
+        b.type = 'button'; b.dataset.img = lightSrc(g.src);
+        const img = el('img'); img.src = lightSrc(g.src); img.alt = g.alt || ''; img.loading = 'lazy';
         b.append(img);
         return b;
       }));
@@ -79,7 +168,7 @@
       } catch { return null; }
     })();
     if (cached && cached.content) { applyContent(cached); return; }
-    const data = await Promise.race([fresh, new Promise(ok => setTimeout(ok, 1200))]);
+    const data = await Promise.race([fresh, new Promise(ok => setTimeout(ok, 6000))]);
     if (data) applyContent(data);
   };
 
@@ -134,22 +223,7 @@
       return Math.min(1, Math.max(0, (scrollY - story.offsetTop) / max));
     };
 
-    // O vídeo é carregado depois da primeira pintura e guardado em memória: saltar para qualquer
-    // instante (para a frente ou para trás) não faz pedidos à rede. Ecrãs pequenos usam a versão leve.
     const DUR = +vid.dataset.dur || 29.1;
-    const loadVideo = async () => {
-      const small = matchMedia('(max-width: 700px)').matches || (navigator.connection && navigator.connection.saveData);
-      const src = small && vid.dataset.small ? vid.dataset.small : vid.dataset.src;
-      if (!src) return;
-      try {
-        const res = await fetch(src);
-        if (!res.ok) throw new Error('vídeo');
-        vid.src = URL.createObjectURL(await res.blob());
-      } catch { vid.src = src; }
-      vid.load();
-    };
-    const afterPaint = () => ('requestIdleCallback' in window ? requestIdleCallback(loadVideo, { timeout: 1500 }) : setTimeout(loadVideo, 300));
-    if (document.readyState === 'complete') afterPaint(); else addEventListener('load', afterPaint, { once: true });
 
     vid.addEventListener('loadedmetadata', () => vid.pause());
     // iOS/Safari só decodifica frames depois de uma tentativa de play
@@ -172,7 +246,7 @@
 
       hint.style.opacity = want > 0.3 ? 0 : 1;
       panels.forEach(p => {
-        const on = cur >= +p.dataset.from && cur <= +p.dataset.to;   // o texto acompanha o que se vê no ecrã
+        const on = !root.classList.contains('boot') && cur >= +p.dataset.from && cur <= +p.dataset.to;   // o texto acompanha o que se vê no ecrã
         if (on !== p.classList.contains('on')) {
           p.classList.toggle('on', on);
           if (typer && p.contains(typer)) on ? startTyping() : stopTyping();
@@ -408,5 +482,14 @@
     }));
   };
 
-  loadContent().finally(init);
+  // o vídeo e as fontes começam já; o conteúdo entra; depois as imagens; só então o esqueleto sai
+  const videoP = loadVideo();
+  const fontsP = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(ok => setTimeout(ok, 4000))]).then(() => bump('fonts', 1));
+  loadContent().finally(() => {
+    bump('content', 1);
+    init();
+    lightenStatic();
+    skeletonImages();
+    Promise.all([fontsP, preloadImages(), videoP]).then(finishBoot);
+  });
 })();
