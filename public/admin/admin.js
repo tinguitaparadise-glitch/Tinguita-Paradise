@@ -230,11 +230,27 @@
   };
 
   /* ---------- imagens ---------- */
+  // reduz cada foto no navegador (máx. 1800 px, JPEG) antes de enviar: pedidos pequenos e rápidos, mesmo em alojamento com limite de 4,5 MB
+  const shrink = async file => {
+    try {
+      const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+      const k = Math.min(1, 1800 / bmp.width);
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+      c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      const blob = await new Promise(ok => c.toBlob(ok, 'image/jpeg', 0.82));
+      if (blob) return new File([blob], 'foto.jpg', { type: 'image/jpeg' });
+    } catch { /* formato que o navegador não lê: envia como está */ }
+    return file;
+  };
   const uploadFiles = async files => {
-    const fd = new FormData();
-    [...files].forEach(f => fd.append('files', f));
-    const r = await api('POST', '/api/admin/upload', fd);
-    return r.files;
+    const out = [];
+    for (const f of files) {
+      const fd = new FormData();
+      fd.append('files', await shrink(f));
+      out.push(...(await api('POST', '/api/admin/upload', fd)).files);
+    }
+    return out;
   };
   const pickFiles = (multiple, onDone) => {
     const inp = h('input', { type: 'file', accept: 'image/*', multiple });

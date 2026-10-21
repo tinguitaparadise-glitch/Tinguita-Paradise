@@ -89,3 +89,13 @@ revoke insert, update, delete, truncate on public.site_content, public.services,
 -- aviso no WhatsApp: indica se a empresa foi avisada do pedido
 alter table public.reservations add column if not exists notified boolean not null default false;
 alter table public.events       add column if not exists notified boolean not null default false;
+
+-- ---------- fotografias enviadas pelo painel (funcionam em alojamentos sem disco persistente, como a Vercel) ----------
+create table if not exists public.media (
+  id         text primary key,
+  mime       text not null default 'image/jpeg',
+  data       bytea not null,
+  created_at timestamptz not null default now()
+);
+alter table public.media enable row level security;
+revoke all on public.media from anon, authenticated;

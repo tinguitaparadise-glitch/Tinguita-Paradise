@@ -10,7 +10,7 @@ if (!process.env.DATABASE_URL) {
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },   // ligação cifrada ao Supabase
-  max: 6,
+  max: process.env.VERCEL ? 1 : 6,   // na Vercel cada instância usa uma só ligação (use o pooler em modo transação, porta 6543)
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
 });
@@ -77,6 +77,11 @@ const setAdmin = (user, salt, hash) => q(
   `insert into public.admin_user (id, username, salt, hash) values (1, $1, $2, $3)
    on conflict (id) do update set username = excluded.username, salt = excluded.salt, hash = excluded.hash`, [user, salt, hash]);
 
+/* ---------- fotografias enviadas ---------- */
+const saveMedia = (id, buf, mime = 'image/jpeg') => q('insert into public.media (id, mime, data) values ($1,$2,$3)', [id, mime, buf]);
+const getMedia = async id => (await q('select mime, data from public.media where id = $1', [id])).rows[0] || null;
+const removeMedia = id => q('delete from public.media where id = $1', [id]);
+
 /* ---------- arranque ---------- */
 const seedIfEmpty = async () => {
   const n = async t => +(await q(`select count(*)::int as n from ${t}`)).rows[0].n;
@@ -86,4 +91,4 @@ const seedIfEmpty = async () => {
 };
 
 module.exports = { pool, q, tx, getContent, getServices, getGallery, setContent, setServices, setGallery,
-  listReservations, listEvents, addReservation, addEvent, setStatus, markNotified, remove, getAdmin, setAdmin, seedIfEmpty };
+  listReservations, listEvents, addReservation, addEvent, setStatus, markNotified, remove, saveMedia, getMedia, removeMedia, getAdmin, setAdmin, seedIfEmpty };
