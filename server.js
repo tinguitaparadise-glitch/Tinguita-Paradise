@@ -100,6 +100,14 @@ app.get('/media/:file', async (req, res) => {
   res.send(row.data);
 });
 
+// diagnóstico: mostra se as variáveis existem e se a base de dados responde (nunca revela valores)
+app.get('/api/health', async (req, res) => {
+  const env = Object.fromEntries(['DATABASE_URL', 'SESSION_SECRET', 'SUPABASE_URL', 'PUBLIC_URL', 'CALLMEBOT_APIKEY', 'WHATSAPP_TOKEN'].map(k => [k, !!process.env[k]]));
+  let db = false, erro;
+  try { await store.q('select 1'); db = true; } catch (e) { erro = e.message; }
+  res.status(db ? 200 : 503).json({ ok: db, db, erro, env, serverless: SERVERLESS, node: process.version });
+});
+
 app.use('/api', async (req, res, next) => { await ready(); next(); });
 
 /* público */

@@ -2,13 +2,10 @@
 const { Pool } = require('pg');
 const defaults = require('./defaults');
 
-if (!process.env.DATABASE_URL) {
-  console.error('\n  Falta a variável DATABASE_URL. Copie .env.example para .env e preencha os dados do Supabase.\n');
-  process.exit(1);
-}
-
+// sem DATABASE_URL não se derruba o processo: as páginas estáticas continuam a abrir e a API responde com erro claro
+const missing = !process.env.DATABASE_URL;
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL || undefined,
   ssl: { rejectUnauthorized: false },   // ligação cifrada ao Supabase
   max: process.env.VERCEL ? 1 : 6,   // na Vercel cada instância usa uma só ligação (use o pooler em modo transação, porta 6543)
   idleTimeoutMillis: 30000,
@@ -16,8 +13,9 @@ const pool = new Pool({
 });
 pool.on('error', e => console.error('Erro na ligação à base de dados:', e.message));
 
-const q = (text, params) => pool.query(text, params);
+const q = (text, params) => (missing ? Promise.reject(new Error('Falta a variável DATABASE_URL')) : pool.query(text, params));
 const tx = async fn => {
+  if (missing) throw new Error('Falta a variável DATABASE_URL');
   const c = await pool.connect();
   try { await c.query('begin'); const r = await fn(c); await c.query('commit'); return r; }
   catch (e) { await c.query('rollback').catch(() => {}); throw e; }
