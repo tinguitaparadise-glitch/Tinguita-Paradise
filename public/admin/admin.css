@@ -35,7 +35,7 @@ button{cursor:pointer}
 
 .main{position:relative;min-width:0;padding:34px clamp(22px,3.2vw,60px) 64px;isolation:isolate}
 .main .bg{position:absolute;z-index:-1;top:0;right:0;width:min(80%,1250px);height:min(52vw,430px);pointer-events:none;
-  background:linear-gradient(90deg,var(--bg) 0%,#090d12d9 28%,#090d1200 72%),linear-gradient(0deg,var(--bg) 0%,#090d1200 52%),url(/images/piscina.jpg) 70% 28%/cover}
+  background:linear-gradient(90deg,var(--bg) 0%,#090d12d9 28%,#090d1200 72%),linear-gradient(0deg,var(--bg) 0%,#090d1200 52%),url(/images/piscina.webp) 70% 28%/cover}
 
 /* ---------- cabeçalho da página ---------- */
 .page-head{position:relative;padding-top:clamp(50px,6vw,84px);margin-bottom:34px;min-height:clamp(210px,24vw,290px)}
@@ -174,7 +174,7 @@ h3{font:600 1.05rem var(--sans);margin-bottom:10px}
 
 /* ---------- acabamento fiel à referência ---------- */
 .main .bg{width:min(78%,1450px);height:min(34vw,470px);
-  background:linear-gradient(90deg,var(--bg) 0%,#090d12b3 22%,#090d1200 58%),linear-gradient(0deg,var(--bg) 0%,#090d1200 46%),url(/images/piscina.jpg) 62% 60%/cover}
+  background:linear-gradient(90deg,var(--bg) 0%,#090d12b3 22%,#090d1200 58%),linear-gradient(0deg,var(--bg) 0%,#090d1200 46%),url(/images/piscina.webp) 62% 60%/cover}
 .stat b,.empty2 h3,.rh h2,.page-head h1{font-variant-numeric:lining-nums}
 .lede{max-width:30em}
 .tab .ico{width:28px;height:28px}
@@ -182,6 +182,6 @@ h3{font:600 1.05rem var(--sans);margin-bottom:10px}
 .stat b{font-size:2.9rem}
 .tab.on .ico svg{fill:#1b1305;stroke:#1b1305}
 .main .bg{background:none}
-.main .bg::before{content:"";position:absolute;inset:0;background:url(/images/piscina.jpg) 62% 60%/cover;filter:brightness(1.3) saturate(1.25) contrast(1.05)}
+.main .bg::before{content:"";position:absolute;inset:0;background:url(/images/piscina.webp) 62% 60%/cover;filter:brightness(1.3) saturate(1.25) contrast(1.05)}
 .main .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,#090d12a6 20%,#090d1200 55%),linear-gradient(0deg,var(--bg) 0%,#090d1200 42%)}
 .main .bg::before{filter:brightness(1.1) saturate(1.2) contrast(1.04)}

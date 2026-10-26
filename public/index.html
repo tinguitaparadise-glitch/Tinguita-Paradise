@@ -22,10 +22,9 @@
     addEventListener('load', function () { setTimeout(function () { if (!window.__motionReady) r.classList.remove('js'); }, 3000); });
   })();
 </script>
-<link rel="preload" as="image" href="images/piscina.jpg" fetchpriority="high">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/piscina.webp" fetchpriority="high">
+<link rel="preload" as="font" type="font/woff2" href="fonts/cormorant-garamond-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/dm-sans-400.woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -87,7 +86,7 @@
 
 <main id="story">
   <div class="stage">
-    <video id="vid" data-src="tinguita-scrub.mp4" data-small="tinguita-scrub-m.mp4" data-tiny="tinguita-scrub-xs.mp4" data-dur="29.1" poster="images/piscina.jpg" muted playsinline preload="none" disablepictureinpicture></video>
+    <video id="vid" data-src="tinguita-scrub.mp4" data-small="tinguita-scrub-m.mp4" data-tiny="tinguita-scrub-xs.mp4" data-dur="29.1" poster="images/piscina.webp" muted playsinline preload="none" disablepictureinpicture></video>
     <div class="shade"></div>
 
     <section class="panel hero" id="inicio" data-from="0" data-to="3.5">
@@ -158,16 +157,16 @@
       <div class="clip">
         <div class="slides" aria-live="off">
         <figure class="slide on" role="group" aria-roledescription="slide" aria-label="1 de 4">
-          <img src="images/piscina.jpg" width="1800" height="1125" alt="Piscina e edifícios do Tinguita Paradise ao pôr do sol" loading="lazy" decoding="async">
+          <img src="images/piscina.webp" width="1800" height="1125" alt="Piscina e edifícios do Tinguita Paradise ao pôr do sol" loading="lazy" decoding="async">
         </figure>
         <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 de 4" aria-hidden="true">
-          <img src="images/terraco.jpg" width="1800" height="1125" alt="Terraço com pergolado e mesas sobre o mar" loading="lazy" decoding="async">
+          <img src="images/terraco.webp" width="1800" height="1125" alt="Terraço com pergolado e mesas sobre o mar" loading="lazy" decoding="async">
         </figure>
         <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 de 4" aria-hidden="true">
-          <img src="images/piscina-dia.jpg" width="1800" height="1125" alt="Piscina e terraço do Tinguita Paradise durante o dia, com vista para o mar" loading="lazy" decoding="async">
+          <img src="images/piscina-dia.webp" width="1800" height="1125" alt="Piscina e terraço do Tinguita Paradise durante o dia, com vista para o mar" loading="lazy" decoding="async">
         </figure>
         <figure class="slide" role="group" aria-roledescription="slide" aria-label="4 de 4" aria-hidden="true">
-          <img src="images/restaurante.jpg" width="1800" height="1125" alt="Sala do restaurante com bar e mesas postas" loading="lazy" decoding="async">
+          <img src="images/restaurante.webp" width="1800" height="1125" alt="Sala do restaurante com bar e mesas postas" loading="lazy" decoding="async">
         </figure>
         </div>
       </div>
@@ -193,7 +192,7 @@
     </div>
     <div class="cards" id="cards">
       <article class="card-s rv">
-        <img src="images/piscina-dia.jpg" alt="Piscina" loading="lazy">
+        <img src="images/piscina-dia.webp" alt="Piscina" loading="lazy">
         <div class="body">
           <h3>Piscina e lazer</h3>
           <p>Espaço aberto para relaxar e aproveitar o dia com a família e os amigos.</p>
@@ -201,7 +200,7 @@
         </div>
       </article>
       <article class="card-s rv d1">
-        <img src="images/restaurante.jpg" alt="Sala do restaurante" loading="lazy">
+        <img src="images/restaurante.webp" alt="Sala do restaurante" loading="lazy">
         <div class="body">
           <h3>Gastronomia de qualidade</h3>
           <p>Pratos preparados com cuidado, num ambiente acolhedor.</p>
@@ -209,7 +208,7 @@
         </div>
       </article>
       <article class="card-s rv d2">
-        <img src="images/terraco.jpg" alt="Bar no terraço" loading="lazy">
+        <img src="images/terraco.webp" alt="Bar no terraço" loading="lazy">
         <div class="body">
           <h3>Bar com bebidas especiais</h3>
           <p>Bebidas selecionadas para a tarde junto ao mar ou para prolongar a noite.</p>
@@ -217,7 +216,7 @@
         </div>
       </article>
       <article class="card-s rv d3">
-        <img src="images/quarto-1.jpg" alt="Quarto" loading="lazy">
+        <img src="images/quarto-1.webp" alt="Quarto" loading="lazy">
         <div class="body">
           <h3>Conforto e tranquilidade</h3>
           <p>Quartos calmos e acolhedores, pensados para toda a família descansar.</p>
@@ -234,13 +233,13 @@
 <section class="sec cream tight" id="quartos-info">
   <div class="wrap-wide">
     <div class="banner rv">
-      <img src="images/hospedagem.jpg" width="2000" height="760" alt="Hospedagem. Quartos para descansar com tranquilidade. Roupa de cama impecável, cabeceira estofada e toalhas bordadas com a nossa marca." loading="lazy">
+      <img src="images/hospedagem.webp" width="2000" height="760" alt="Hospedagem. Quartos para descansar com tranquilidade. Roupa de cama impecável, cabeceira estofada e toalhas bordadas com a nossa marca." loading="lazy">
       <a class="banner-btn" href="#reservas" data-open="reservas" aria-label="Reservar quarto"></a>
     </div>
 
     <!-- versão para telemóvel: o texto da imagem passa a texto real, legível e editável no painel -->
     <div class="banner-m">
-      <div class="bm-photo"><img src="images/hospedagem.jpg" alt="Cama de casal com roupa de cama branca, toalhas bordadas e cabeceira estofada" loading="lazy"></div>
+      <div class="bm-photo"><img src="images/hospedagem.webp" alt="Cama de casal com roupa de cama branca, toalhas bordadas e cabeceira estofada" loading="lazy"></div>
       <div class="bm-body">
         <p class="tag">Hospedagem</p>
         <h2 class="big" data-k="roomsTitle">Quartos para descansar com tranquilidade</h2>
@@ -263,7 +262,7 @@
       <a class="btn" href="https://wa.me/244940637666" data-wa target="_blank" rel="noopener">Reservar mesa</a>
     </div>
     <div class="rest-img rv d1">
-      <img src="images/terraco.jpg" alt="Terraço sobre o mar com mesas e pergolado" loading="lazy">
+      <img src="images/terraco.webp" alt="Terraço sobre o mar com mesas e pergolado" loading="lazy">
     </div>
   </div>
 </section>
@@ -278,16 +277,16 @@
       <h2 class="big">Momentos únicos para toda a família</h2>
     </div>
     <div class="gallery" id="gallery">
-      <button class="g rv" type="button" data-img="images/galeria-1.jpg"><img src="images/galeria-1.jpg" alt="Piscina, pérgula e edifício ao entardecer" loading="lazy" decoding="async"></button>
-      <button class="g rv d1" type="button" data-img="images/galeria-2.jpg"><img src="images/galeria-2.jpg" alt="Terraço com piscina e vista para o mar ao pôr do sol" loading="lazy" decoding="async"></button>
-      <button class="g rv d2" type="button" data-img="images/galeria-3.jpg"><img src="images/galeria-3.jpg" alt="Sala de estar com sofás e mesa de apoio" loading="lazy" decoding="async"></button>
-      <button class="g rv d3" type="button" data-img="images/galeria-4.jpg"><img src="images/galeria-4.jpg" alt="Piscina e bungalows ao pôr do sol" loading="lazy" decoding="async"></button>
-      <button class="g rv" type="button" data-img="images/galeria-5.jpg"><img src="images/galeria-5.jpg" alt="Terraço com bar, pérgula e mesas" loading="lazy" decoding="async"></button>
-      <button class="g rv d1" type="button" data-img="images/piscina-dia.jpg"><img src="images/piscina-dia.jpg" alt="Piscina e terraço com vista para o mar" loading="lazy" decoding="async"></button>
-      <button class="g rv d2" type="button" data-img="images/terraco.jpg"><img src="images/terraco.jpg" alt="Terraço com vista para o mar" loading="lazy" decoding="async"></button>
-      <button class="g rv d3" type="button" data-img="images/quarto-1.jpg"><img src="images/quarto-1.jpg" alt="Quarto com cama de casal" loading="lazy" decoding="async"></button>
-      <button class="g rv" type="button" data-img="images/restaurante.jpg"><img src="images/restaurante.jpg" alt="Sala do restaurante" loading="lazy" decoding="async"></button>
-      <button class="g rv d1" type="button" data-img="images/quarto-2.jpg"><img src="images/quarto-2.jpg" alt="Quarto com toalhas bordadas" loading="lazy" decoding="async"></button>
+      <button class="g rv" type="button" data-img="images/galeria-1.webp"><img src="images/galeria-1.webp" alt="Piscina, pérgula e edifício ao entardecer" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/galeria-2.webp"><img src="images/galeria-2.webp" alt="Terraço com piscina e vista para o mar ao pôr do sol" loading="lazy" decoding="async"></button>
+      <button class="g rv d2" type="button" data-img="images/galeria-3.webp"><img src="images/galeria-3.webp" alt="Sala de estar com sofás e mesa de apoio" loading="lazy" decoding="async"></button>
+      <button class="g rv d3" type="button" data-img="images/galeria-4.webp"><img src="images/galeria-4.webp" alt="Piscina e bungalows ao pôr do sol" loading="lazy" decoding="async"></button>
+      <button class="g rv" type="button" data-img="images/galeria-5.webp"><img src="images/galeria-5.webp" alt="Terraço com bar, pérgula e mesas" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/piscina-dia.webp"><img src="images/piscina-dia.webp" alt="Piscina e terraço com vista para o mar" loading="lazy" decoding="async"></button>
+      <button class="g rv d2" type="button" data-img="images/terraco.webp"><img src="images/terraco.webp" alt="Terraço com vista para o mar" loading="lazy" decoding="async"></button>
+      <button class="g rv d3" type="button" data-img="images/quarto-1.webp"><img src="images/quarto-1.webp" alt="Quarto com cama de casal" loading="lazy" decoding="async"></button>
+      <button class="g rv" type="button" data-img="images/restaurante.webp"><img src="images/restaurante.webp" alt="Sala do restaurante" loading="lazy" decoding="async"></button>
+      <button class="g rv d1" type="button" data-img="images/quarto-2.webp"><img src="images/quarto-2.webp" alt="Quarto com toalhas bordadas" loading="lazy" decoding="async"></button>
     </div>
   </div>
 </section>
@@ -295,7 +294,7 @@
 <div class="wave" style="--from:#f7f0e4;--to:#090f17"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path class="f" d="M0 30C220 85 520 0 800 35S1240 90 1440 40V90H0Z"/><path class="l" d="M0 30C220 85 520 0 800 35S1240 90 1440 40"/></svg></div>
 
 <!-- Eventos e rodapé sobre a mesma imagem -->
-<section class="finale" id="eventos-info" style="--photo:url('images/piscina.jpg')">
+<section class="finale" id="eventos-info" style="--photo:url('images/piscina.webp')">
   <div class="wrap ev rv">
     <p class="tag">Eventos</p>
     <h2 class="big" data-k="eventsTitle">Celebre num cenário paradisíaco</h2>

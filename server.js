@@ -57,8 +57,7 @@ let publicCache = null, publicAt = 0;
 const dropCache = () => { publicCache = null; };
 const getPublic = async () => {
   if (publicCache && Date.now() - publicAt < 15000) return publicCache;
-  const [content, services, gallery] = await Promise.all([store.getContent(), store.getServices(), store.getGallery()]);
-  publicCache = { content, services, gallery }; publicAt = Date.now();
+  publicCache = await store.getPublicAll(); publicAt = Date.now();
   return publicCache;
 };
 
@@ -108,12 +107,15 @@ app.get('/api/health', async (req, res) => {
   res.status(db ? 200 : 503).json({ ok: db, db, erro, env, serverless: SERVERLESS, node: process.version });
 });
 
-app.use('/api', async (req, res, next) => { await ready(); next(); });
+// o conteúdo público e os formulários não esperam pelo arranque; só o painel e o login precisam da conta
+app.use(['/api/login', '/api/admin'], async (req, res, next) => { await ready(); next(); });
+// arranque em segundo plano (cria o conteúdo inicial na primeira vez)
+ready().catch(e => console.error('Arranque:', e.message));
 
 /* público */
-// s-maxage: a rede da Vercel guarda a resposta 20 s (carregamento rápido sem consultar a base de dados)
+// s-maxage: a rede da Vercel guarda a resposta 30 s e serve a antiga enquanto atualiza (carregamento rápido sem consultar a base de dados)
 app.get('/api/public', async (req, res) => {
-  res.set('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=120');
+  res.set('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=600');
   res.json(await getPublic());
 });
 
@@ -126,9 +128,12 @@ const alertCompany = async (kind, r) => {
   } catch (e) { console.error('Aviso no WhatsApp falhou:', e.message); }
 };
 // em alojamento sem processo permanente o envio tem de terminar antes de responder
+let waitUntil = null;
+try { ({ waitUntil } = require('@vercel/functions')); } catch { /* fora da Vercel */ }
 const alertAfter = async (kind, r) => {
   const p = alertCompany(kind, r);
-  if (SERVERLESS) await Promise.race([p, new Promise(ok => setTimeout(ok, 7000))]);
+  // na Vercel o aviso continua depois de responder ao visitante (sem o fazer esperar); sem waitUntil espera no máximo 7 s
+  if (SERVERLESS) { if (waitUntil) waitUntil(p); else await Promise.race([p, new Promise(ok => setTimeout(ok, 7000))]); }
 };
 
 const common = body => ({

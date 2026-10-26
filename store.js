@@ -30,6 +30,16 @@ const getContent = async () => {
 const getServices = async () => (await q('select id, title, text, image, label, href from public.services order by position, id')).rows;
 const getGallery = async () => (await q('select id, src, alt from public.gallery order by position, id')).rows;
 
+// conteúdo público numa só ida à base de dados (3 consultas em 1)
+const getPublicAll = async () => {
+  const { rows } = await q(`select
+    (select coalesce(jsonb_object_agg(key, value), '{}'::jsonb) from public.site_content) as content,
+    (select coalesce(jsonb_agg(jsonb_build_object('id', id, 'title', title, 'text', text, 'image', image, 'label', label, 'href', href) order by position, id), '[]'::jsonb) from public.services) as services,
+    (select coalesce(jsonb_agg(jsonb_build_object('id', id, 'src', src, 'alt', alt) order by position, id), '[]'::jsonb) from public.gallery) as gallery`);
+  const r = rows[0];
+  return { content: { ...defaults.content, ...r.content }, services: r.services, gallery: r.gallery };
+};
+
 const setContent = obj => {
   const keys = Object.keys(obj);
   if (!keys.length) return Promise.resolve();
@@ -88,5 +98,5 @@ const seedIfEmpty = async () => {
   if (!(await n('public.gallery'))) await setGallery(defaults.gallery);
 };
 
-module.exports = { pool, q, tx, getContent, getServices, getGallery, setContent, setServices, setGallery,
+module.exports = { pool, q, tx, getPublicAll, getContent, getServices, getGallery, setContent, setServices, setGallery,
   listReservations, listEvents, addReservation, addEvent, setStatus, markNotified, remove, saveMedia, getMedia, removeMedia, getAdmin, setAdmin, seedIfEmpty };

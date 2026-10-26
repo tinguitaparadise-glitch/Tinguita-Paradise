@@ -11,7 +11,11 @@
   const slowNet = !!(conn && (conn.saveData || /(^|-)(2g|3g)/.test(conn.effectiveType || '')));
   const lite = () => slowNet || matchMedia('(max-width: 700px)').matches;
   // images/x.jpg -> images/x-s.jpg (800 px) quando o ecrã é pequeno ou a ligação é lenta
-  const lightSrc = src => (lite() && /^images\/[\w-]+\.jpg$/.test(src) && !/-s\.jpg$/.test(src) ? src.replace(/\.jpg$/, '-s.jpg') : src);
+  // e usa WebP (cerca de 40% mais leve): o conteúdo guardado na base de dados ainda aponta para .jpg
+  const lightSrc = src => {
+    if (/^images\/[\w-]+\.jpg$/.test(src)) src = src.replace(/\.jpg$/, '.webp');
+    return lite() && /^images\/[\w-]+\.webp$/.test(src) && !/-s\.webp$/.test(src) ? src.replace(/\.webp$/, '-s.webp') : src;
+  };
   const lightenStatic = () => {
     $$('img[src^="images/"]').forEach(i => { const n = lightSrc(i.getAttribute('src')); if (n !== i.getAttribute('src')) i.setAttribute('src', n); });
     $$('[data-img]').forEach(b => { b.dataset.img = lightSrc(b.dataset.img); });
@@ -218,10 +222,11 @@
       typer && typer.classList.remove('done');
     };
 
-    const progress = () => {
-      const max = story.offsetHeight - innerHeight;
-      return Math.min(1, Math.max(0, (scrollY - story.offsetTop) / max));
-    };
+    // medidas guardadas: ler offsetTop/offsetHeight a cada quadro obrigaria o navegador a recalcular o layout
+    let storyTop = 0, storyH = 0, vh = innerHeight;
+    const measure = () => { storyTop = story.offsetTop; storyH = story.offsetHeight; vh = innerHeight; };
+    measure();
+    const progress = () => Math.min(1, Math.max(0, (scrollY - storyTop) / Math.max(1, storyH - vh)));
 
     const DUR = +vid.dataset.dur || 29.1;
 
@@ -229,8 +234,9 @@
     // iOS/Safari só decodifica frames depois de uma tentativa de play
     addEventListener('touchstart', () => vid.play().then(() => vid.pause()).catch(() => {}), { once: true, passive: true });
 
-    let cur = 0, lastT = performance.now();
-    const tick = now => {
+    let cur = 0, lastT = performance.now(), running = true, lastHint = -1;
+    function wake() { if (!running) { running = true; lastT = performance.now(); requestAnimationFrame(tick); } }
+    function tick(now) {
       const dt = Math.min(0.1, Math.max(0.001, (now - lastT) / 1000));
       lastT = now;
       const dur = vid.duration || DUR;
@@ -244,20 +250,29 @@
       if (Math.abs(want - cur) < 0.004) cur = want;
       if (vid.readyState >= 2 && !vid.seeking && Math.abs(vid.currentTime - cur) > 0.012) vid.currentTime = cur;
 
-      hint.style.opacity = want > 0.3 ? 0 : 1;
+      const hv = want > 0.3 ? 0 : 1;
+      if (hv !== lastHint) { hint.style.opacity = hv; lastHint = hv; }
+      const booting = !window.__ready;                          // o título só começa a ser escrito quando o site está pronto
       panels.forEach(p => {
-        const on = !root.classList.contains('boot') && cur >= +p.dataset.from && cur <= +p.dataset.to;   // o texto acompanha o que se vê no ecrã
+        const on = !booting && cur >= +p.dataset.from && cur <= +p.dataset.to;   // o texto acompanha o que se vê no ecrã
         if (on !== p.classList.contains('on')) {
           p.classList.toggle('on', on);
           if (typer && p.contains(typer)) on ? startTyping() : stopTyping();
         }
       });
+      // sem movimento e sem esqueleto: o ciclo pára (poupa CPU e bateria) e a rolagem volta a acordá-lo
+      if (cur === want && !vid.seeking && !booting && (vid.readyState >= 2 || !vid.src)) { running = false; return; }
       requestAnimationFrame(tick);
-    };
+    }
+    addEventListener('scroll', wake, { passive: true });
+    addEventListener('resize', () => { measure(); wake(); });
+    vid.addEventListener('loadeddata', wake);
+    vid.addEventListener('seeked', wake);
+    if ('ResizeObserver' in window) new ResizeObserver(() => { measure(); wake(); }).observe(story);
     requestAnimationFrame(tick);
 
     const nav = $('#nav');
-    const onScroll = () => nav.classList.toggle('solid', scrollY > story.offsetTop + story.offsetHeight - innerHeight);
+    const onScroll = () => nav.classList.toggle('solid', scrollY > storyTop + storyH - vh);
     addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
     // galeria ampliada
@@ -269,11 +284,21 @@
     lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 
     // luz ambiente que segue o cursor nas secções escuras
-    $$('.feats, .dark, .final, footer').forEach(sec => sec.addEventListener('pointermove', e => {
-      const r = sec.getBoundingClientRect();
-      sec.style.setProperty('--mx', e.clientX - r.left + 'px');
-      sec.style.setProperty('--my', e.clientY - r.top + 'px');
-    }));
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      $$('.feats, .dark, .final, footer').forEach(sec => {
+        let ev = null;
+        sec.addEventListener('pointermove', e => {
+          if (ev) { ev = e; return; }
+          ev = e;
+          requestAnimationFrame(() => {
+            const r = sec.getBoundingClientRect();
+            sec.style.setProperty('--mx', ev.clientX - r.left + 'px');
+            sec.style.setProperty('--my', ev.clientY - r.top + 'px');
+            ev = null;
+          });
+        }, { passive: true });
+      });
+    }
 
     // barra de progresso da página
     const bar = $('#progress');
@@ -431,7 +456,8 @@
       targets.forEach((t, k) => { if (t && k > 0 && t.getBoundingClientRect().top < innerHeight * 0.4) cur = k; });
       links.forEach((a, k) => a.classList.toggle('on', k === cur));
     };
-    addEventListener('scroll', spy, { passive: true }); spy();
+    let spyQ = false;
+    addEventListener('scroll', () => { if (!spyQ) { spyQ = true; requestAnimationFrame(() => { spyQ = false; spy(); }); } }, { passive: true }); spy();
 
     // janelas de reserva e evento
     $$('[data-open]').forEach(a => a.addEventListener('click', e => {
